@@ -1,5 +1,5 @@
 const express = require('express');
-const { createOrderCtrl, viewOrderCtrl, orderDetailsCtrl, updateOrderStatusCtrl, getAllOrdersCtrl} = require('../api/orderApi');
+const { createOrderCtrl, viewOrderCtrl, orderDetailsCtrl, updateOrderStatusCtrl, getAllOrdersCtrl } = require('../api/orderApi');
 const { authMiddleware, adminMiddleware } = require('../middleware/authMiddleware')
 
 

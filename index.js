@@ -9,6 +9,7 @@ const { userRoute } = require('./route/userRoute')
 const { productRoute } = require('./route/productRoute')
 const { cartRoute } = require('./route/cartRoute')
 const { orderRoute } = require('./route/orderRoute')
+const { paymentRoute } = require('./route/paymentRoute')
 const PORT = process.env.PORT || 5001;
 dotenv.config();    
 
@@ -34,6 +35,8 @@ app.use('/auth', userRoute)
 app.use('/product', productRoute)
 app.use('/cart', cartRoute)
 app.use('/order', orderRoute)
+app.use('/payments', paymentRoute);
+
 
 //error
 app.use(notFound)

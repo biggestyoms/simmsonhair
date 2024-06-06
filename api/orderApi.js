@@ -127,6 +127,4 @@ const updateOrderCtrl = asyncHandler(async (req, res) => {
 
 
 
-
-
 module.exports = { createOrderCtrl, viewOrderCtrl, orderDetailsCtrl, updateOrderCtrl,  updateOrderStatusCtrl, getAllOrdersCtrl };
