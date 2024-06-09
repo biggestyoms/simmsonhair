@@ -14,7 +14,8 @@ const PORT = process.env.PORT || 5001;
 dotenv.config();    
 
 
-app.use(express.json());
+// app.use(express.json());
+app.use(express.json({limit:"10mb"}))
 
 app.use(cors());
 

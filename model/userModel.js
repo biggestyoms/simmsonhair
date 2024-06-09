@@ -15,6 +15,18 @@ const userSchema = new mongoose.Schema({
     enum: ['admin', 'normal'],
     default: 'normal',
   },
+  otp: {
+    type: String,
+  },
+  otpExpiry: {
+    type: Date,
+  },
+  resetPasswordToken: {
+    type: String,
+  },
+  resetPasswordExpiry: {
+    type: String,
+  },
   cart: [{
     product: {
       type: mongoose.Schema.Types.ObjectId,

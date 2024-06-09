@@ -6,10 +6,10 @@ const { authMiddleware, adminMiddleware } = require('../middleware/authMiddlewar
 const productRoute = express.Router();
 
 productRoute.get('/all',  getAllProductsCtrl);
-productRoute.post('/add', addProductCtrl);
+productRoute.post('/add',authMiddleware, adminMiddleware, addProductCtrl);
 productRoute.get('/:id', getProductByIdCtrl);
-productRoute.put('/edit/:id', editProductCtrl);
-productRoute.delete('/delete/:id', deleteProductCtrl);
+productRoute.put('/edit/:id',authMiddleware, adminMiddleware, editProductCtrl);
+productRoute.delete('/delete/:id',authMiddleware, adminMiddleware, deleteProductCtrl);
 productRoute.get('/', getFilteredProductsCtrl);
 
 module.exports = { productRoute };

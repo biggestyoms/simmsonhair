@@ -112,21 +112,23 @@ const getFilteredProductsCtrl = asyncHandler(async (req, res) => {
   try {
     let products;
     let query = {};
+
     if (req?.query?.category && req?.query?.category !== 'All') {
-      query = { category: req?.query?.category };
+      query = { category: { $regex: new RegExp(`^${req.query.category}$`, 'i') } };
     }
 
-    if(req?.query?.category === 'All' || req?.query?.category === '' || !req?.query?.category){
+    if (req?.query?.category === 'All' || req?.query?.category === '' || !req?.query?.category) {
       products = await Product.find();
+    } else {
+      products = await Product.find(query);
     }
-
-    products = await Product.find(query);
 
     res.status(200).json({ success: true, data: products });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
 
 
 
