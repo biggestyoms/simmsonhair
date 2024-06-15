@@ -21,7 +21,7 @@ const processSquarePayment = async (token, amount) => {
       sourceId: token,
       amountMoney: {
         amount: amount * 100, // Square expects amount in cents
-        currency: 'USD',
+        currency: 'CAD',
       },
       idempotencyKey: `${new Date().getTime().toString()}-${Math.random().toString(36).substr(2, 9)}`,
     });
