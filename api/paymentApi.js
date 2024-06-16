@@ -15,6 +15,7 @@ const client = new Client({
 const { paymentsApi } = client;
 
 // Function to process payment using Square
+
 const processSquarePayment = async (token, amount) => {
   try {
     const response = await paymentsApi.createPayment({
@@ -38,6 +39,7 @@ const processSquarePayment = async (token, amount) => {
     };
   }
 };
+
 
 // Route to process payment
 const processPaymentCtrl = asyncHandler(async (req, res) => {
