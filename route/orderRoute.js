@@ -7,9 +7,9 @@ const orderRoute = express.Router();
 
 orderRoute.post('/',authMiddleware, createOrderCtrl);
 orderRoute.get('/user',authMiddleware, viewOrderCtrl);
-orderRoute.get('/:orderId',authMiddleware, orderDetailsCtrl);
-orderRoute.put('/updateStatus',authMiddleware, adminMiddleware, updateOrderStatusCtrl);
 orderRoute.get('/all',authMiddleware, adminMiddleware, getAllOrdersCtrl);
+orderRoute.put('/updateStatus',authMiddleware, adminMiddleware, updateOrderStatusCtrl);
+orderRoute.get('/:orderId',authMiddleware, orderDetailsCtrl);
 
 
 

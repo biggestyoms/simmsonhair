@@ -19,6 +19,10 @@ const paymentSchema = new mongoose.Schema({
     enum: ['success', 'failed'],
     default: 'success'
   },
+  productNames: { 
+    type: String,
+    default: ''
+  },
   date: {
     type: Date,
     default: Date.now

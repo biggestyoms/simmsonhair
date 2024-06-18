@@ -108,19 +108,27 @@ const getAllProductsCtrl = asyncHandler(async (req, res) => {
   }
 });
 
+
 const getFilteredProductsCtrl = asyncHandler(async (req, res) => {
+  const page = parseInt(req.query.page) || 1; // Current page number, default to 1 if not provided
+  const limit = 4; // Number of products per page
+
   try {
     let products;
     let query = {};
 
-    if (req?.query?.category && req?.query?.category !== 'All') {
+    if (req.query.category && req.query.category !== 'All') {
       query = { category: { $regex: new RegExp(`^${req.query.category}$`, 'i') } };
     }
 
-    if (req?.query?.category === 'All' || req?.query?.category === '' || !req?.query?.category) {
-      products = await Product.find();
+    if (req.query.category === 'All' || req.query.category === '' || !req.query.category) {
+      products = await Product.find()
+        .skip((page - 1) * limit)
+        .limit(limit);
     } else {
-      products = await Product.find(query);
+      products = await Product.find(query)
+        .skip((page - 1) * limit)
+        .limit(limit);
     }
 
     res.status(200).json({ success: true, data: products });
@@ -128,6 +136,7 @@ const getFilteredProductsCtrl = asyncHandler(async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 });
+
 
 
 

@@ -71,19 +71,30 @@ const orderDetailsCtrl = asyncHandler(async (req, res) => {
     }
 });
 
-// Fetch all orders
+
+//fetch all orders
 const getAllOrdersCtrl = asyncHandler(async (req, res) => {
+  const { status } = req.query;
+
   try {
-    const orders = await Order.find().populate('user').populate('products.product');
+    let filter = {};
+    if (status) {
+      filter.status = status;
+    }
+
+    const orders = await Order.find(filter).populate('user').populate('products.product');
     res.status(200).json({ success: true, data: orders });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.error('Error fetching all orders:', error?.message); 
+    res.status(500).json({ success: false, error: error?.message });
   }
 });
 
+
+
 // Update order status
 const updateOrderStatusCtrl = asyncHandler(async (req, res) => {
-  const { orderId, status } = req.body;
+  const { orderId, status } = req?.body;
 
   try {
     const order = await Order.findById(orderId);

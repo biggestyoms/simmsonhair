@@ -69,6 +69,12 @@ const processPaymentCtrl = asyncHandler(async (req, res) => {
 
     await payment.save();
 
+    const productNames = cartItems.map(item => item.name).join(', ');
+
+      // Optionally, you can save the product names with the payment details
+      payment.productNames = productNames;
+      await payment.save();
+
     // Clear the user's cart
     const user = await User.findById(userId);
     if (!user) {
