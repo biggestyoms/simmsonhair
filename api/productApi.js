@@ -99,46 +99,58 @@ const deleteProductCtrl = asyncHandler(async (req, res) => {
 //fetch all products
 const getAllProductsCtrl = asyncHandler(async (req, res) => {
   try {
-    const products = await Product.find();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
-    res.status(200).json({ success: true, data: products });
+    const totalProducts = await Product.countDocuments();
+    const products = await Product.find().skip(skip).limit(limit);
+
+    res.status(200).json({
+      success: true,
+      data: products,
+      currentPage: page,
+      totalPages: Math.ceil(totalProducts / limit),
+      totalProducts,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
 
-
 const getFilteredProductsCtrl = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page) || 1; // Current page number, default to 1 if not provided
-  const limit = 4; // Number of products per page
+  const limit = 8; // Number of products per page
 
   try {
     let products;
     let query = {};
 
+    // Add category filter if provided and not 'All'
     if (req.query.category && req.query.category !== 'All') {
-      query = { category: { $regex: new RegExp(`^${req.query.category}$`, 'i') } };
+      query.category = { $regex: new RegExp(`^${req.query.category}$`, 'i') };
     }
 
-    if (req.query.category === 'All' || req.query.category === '' || !req.query.category) {
-      products = await Product.find()
-        .skip((page - 1) * limit)
-        .limit(limit);
-    } else {
-      products = await Product.find(query)
-        .skip((page - 1) * limit)
-        .limit(limit);
+    // Add search filter if provided
+    if (req.query.search) {
+      const searchRegex = new RegExp(req.query.search, 'i');
+      query.$or = [
+        { name: searchRegex },
+        { description: searchRegex }
+      ];
     }
+
+    // Fetch products with pagination
+    products = await Product.find(query)
+      .skip((page - 1) * limit)
+      .limit(limit);
 
     res.status(200).json({ success: true, data: products });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 });
-
-
-
 
 
 

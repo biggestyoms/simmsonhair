@@ -74,7 +74,9 @@ const orderDetailsCtrl = asyncHandler(async (req, res) => {
 
 //fetch all orders
 const getAllOrdersCtrl = asyncHandler(async (req, res) => {
-  const { status } = req.query;
+  const { status, page = 1, limit = 5 } = req?.query;
+  const pageNumber = parseInt(page);
+  const pageSize = parseInt(limit);
 
   try {
     let filter = {};
@@ -82,13 +84,25 @@ const getAllOrdersCtrl = asyncHandler(async (req, res) => {
       filter.status = status;
     }
 
-    const orders = await Order.find(filter).populate('user').populate('products.product');
-    res.status(200).json({ success: true, data: orders });
+    const totalOrders = await Order.countDocuments(filter);
+    const orders = await Order.find(filter)
+      .populate('user')
+      .populate('products.product')
+      .skip((pageNumber - 1) * pageSize)
+      .limit(pageSize);
+
+    res.status(200).json({
+      success: true,
+      data: orders,
+      totalPages: Math.ceil(totalOrders / pageSize),
+      currentPage: pageNumber,
+    });
   } catch (error) {
-    console.error('Error fetching all orders:', error?.message); 
+    console.error('Error fetching all orders:', error?.message);
     res.status(500).json({ success: false, error: error?.message });
   }
 });
+
 
 
 
