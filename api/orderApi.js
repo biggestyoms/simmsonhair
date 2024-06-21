@@ -74,7 +74,7 @@ const orderDetailsCtrl = asyncHandler(async (req, res) => {
 
 //fetch all orders
 const getAllOrdersCtrl = asyncHandler(async (req, res) => {
-  const { status, page = 1, limit = 5 } = req?.query;
+  const { status, page = 1, limit = 5, orderId } = req.query;
   const pageNumber = parseInt(page);
   const pageSize = parseInt(limit);
 
@@ -82,6 +82,9 @@ const getAllOrdersCtrl = asyncHandler(async (req, res) => {
     let filter = {};
     if (status) {
       filter.status = status;
+    }
+    if (orderId) {
+      filter._id = orderId;
     }
 
     const totalOrders = await Order.countDocuments(filter);
@@ -98,10 +101,12 @@ const getAllOrdersCtrl = asyncHandler(async (req, res) => {
       currentPage: pageNumber,
     });
   } catch (error) {
-    console.error('Error fetching all orders:', error?.message);
-    res.status(500).json({ success: false, error: error?.message });
+    console.error('Error fetching all orders:', error.message);
+    res.status(500).json({ success: false, error: error.message });
   }
 });
+
+
 
 
 
